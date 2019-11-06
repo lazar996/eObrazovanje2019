@@ -1,11 +1,21 @@
 package eObrazovanje.web.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity(name= "predmet")
 public class Predmet {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="predmet_id")
 	private Integer predmetId;
+	
+	@NotBlank(message = "unesite naziv")
+	@Column(nullable = false)
 	private String naziv;
+	
+	@Column
 	private String opis;
 	
 	
@@ -39,9 +49,9 @@ public class Predmet {
 	}
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return "Predmet [predmetId=" + predmetId + ", naziv=" + naziv + ", opis=" + opis + "]";
 	}
+
 	
 	
 
