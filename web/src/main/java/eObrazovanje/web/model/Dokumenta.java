@@ -1,27 +1,39 @@
 package eObrazovanje.web.model;
 
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+@Entity(name="dokumenta")
 public class Dokumenta {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "dokumenti_id")
 	private Integer dokumentId;
+	
+	@Column(nullable = false)
 	private String naziv;
+	
+	@Column(nullable = false, name = "tip_dokumenta")
 	private String tipDokumenta;
+	
+	
+	  @Column(nullable = false,name = "download_uri")
+	    private String downloadUri;
+
+	  
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="jmbg", referencedColumnName = "jmbg", nullable = true)
 	private Ucenik ucenik;
 	
 	
 	
 	public Dokumenta() {
-		super();
+		
 	}
 
 
 
-	public Dokumenta(Integer dokumentId, String naziv, String tipDokumenta, Ucenik ucenik) {
-		super();
-		this.dokumentId = dokumentId;
-		this.naziv = naziv;
-		this.tipDokumenta = tipDokumenta;
-		this.ucenik = ucenik;
-	}
 
 
 
@@ -73,13 +85,28 @@ public class Dokumenta {
 
 
 
-	@Override
-	public String toString() {
-		return "Dokumenta [dokumentId=" + dokumentId + ", naziv=" + naziv + ", tipDokumenta=" + tipDokumenta
-				+ ", ucenik=" + ucenik + "]";
+	public String getDownloadUri() {
+		return downloadUri;
 	}
-	
-	
+
+
+
+	public void setDownloadUri(String downloadUri) {
+		this.downloadUri = downloadUri;
+	}
+
+
+
+    @Override
+    public String toString() {
+        return "Dokument{" +
+                "dokumentId=" + dokumentId +
+                ", naziv='" + naziv + '\'' +
+                ", tipDokumenta='" + tipDokumenta + '\'' +
+                ", downloadUri= '" + downloadUri +'\''+
+                ", ucenik=" + ucenik +
+                '}';
+    }
 	
 
 

@@ -1,41 +1,62 @@
 package eObrazovanje.web.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name ="korisnik")
 public class Korisnik {
 
+	@Id
+	@Column
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long jmbg;
 	
-	private String ime;
-	private String prezime;
-	private String korisnickoIme;
-	private String lozinka;
+	@Column(name = "tip_korisnika")
 	private String tipKorisnika;
-	private String jmbg;
+	
+	@Column(name="korisnicko_ime")
+	private String korisnickoIme;
+	
+	@Column
+	private String lozinka;
+	
+	
+	@Column
+	private String ime;
+	@Column
+	private String prezime;
+	
+
+
+
+	@Column
 	private String grad;
+	@Column
 	private String ulica;
+	@Column
 	private String broj;
+	@Column
 	private String email;
 	
 	
 	
 	public Korisnik() {
+
 		
 	}
 
 
 
-	public Korisnik(String ime, String prezime, String korisnickoIme, String lozinka, String tipKorisnika, String jmbg,
+	public Korisnik(Long jmbg, String tipKorisnika, String korisnickoIme, String lozinka, String ime, String prezime,
 			String grad, String ulica, String broj, String email) {
 		super();
-		this.ime = ime;
-		this.prezime = prezime;
+		this.jmbg = jmbg;
+		this.tipKorisnika = tipKorisnika;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
-		this.tipKorisnika = tipKorisnika;
-		this.jmbg = jmbg;
+		this.ime = ime;
+		this.prezime = prezime;
 		this.grad = grad;
 		this.ulica = ulica;
 		this.broj = broj;
@@ -43,27 +64,29 @@ public class Korisnik {
 	}
 
 
-
-	public String getIme() {
-		return ime;
+    public Korisnik(String tipKorisnika){
+        this.tipKorisnika = tipKorisnika;
+    }
+	public Long getJmbg() {
+		return jmbg;
 	}
 
 
 
-	public void setIme(String ime) {
-		this.ime = ime;
+	public void setJmbg(Long jmbg) {
+		this.jmbg = jmbg;
 	}
 
 
 
-	public String getPrezime() {
-		return prezime;
+	public String getTipKorisnika() {
+		return tipKorisnika;
 	}
 
 
 
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
+	public void setTipKorisnika(String tipKorisnika) {
+		this.tipKorisnika = tipKorisnika;
 	}
 
 
@@ -92,27 +115,29 @@ public class Korisnik {
 
 
 
-	public String getTipKorisnika() {
-		return tipKorisnika;
+	public String getIme() {
+		return ime;
 	}
 
 
 
-	public void setTipKorisnika(String tipKorisnika) {
-		this.tipKorisnika = tipKorisnika;
+	public void setIme(String ime) {
+		this.ime = ime;
 	}
 
 
 
-	public String getJmbg() {
-		return jmbg;
+	public String getPrezime() {
+		return prezime;
 	}
 
 
 
-	public void setJmbg(String jmbg) {
-		this.jmbg = jmbg;
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
 	}
+	
+	
 
 
 
@@ -166,12 +191,15 @@ public class Korisnik {
 
 	@Override
 	public String toString() {
-		return "korisnik [ime=" + ime + ", prezime=" + prezime + ", korisnickoIme=" + korisnickoIme + ", lozinka="
-				+ lozinka + ", tipKorisnika=" + tipKorisnika + ", jmbg=" + jmbg + ", grad=" + grad + ", ulica=" + ulica
-				+ ", broj=" + broj + ", email=" + email + "]";
+		return "Korisnik {jmbg=" + jmbg + ", tipKorisnika=" + tipKorisnika + ", korisnickoIme=" + korisnickoIme
+				+ ", lozinka=" + lozinka + ", ime=" + ime + ", prezime=" + prezime + ", grad=" + grad + ", ulica="
+				+ ulica + ", broj=" + broj + ", email=" + email + "}";
 	}
+
 	
 	
 	
+
+
 	
 }

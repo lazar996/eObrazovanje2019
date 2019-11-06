@@ -2,7 +2,7 @@ package eObrazovanje.web.dto;
 
 import eObrazovanje.web.model.Dokumenta;
 
-public class DokmentaDTO {
+public class DokumentaDTO {
 
 	
 	
@@ -13,12 +13,12 @@ public class DokmentaDTO {
 	private String imePrezime;
 	
 	
-	public DokmentaDTO() {
+	public DokumentaDTO() {
 		super();
 	}
 
 
-	public DokmentaDTO(Dokumenta dokumenta) {
+	public DokumentaDTO(Dokumenta dokumenta) {
 	
 		this.id = dokumenta.getDokumentId();
 		this.naziv = dokumenta.getNaziv();

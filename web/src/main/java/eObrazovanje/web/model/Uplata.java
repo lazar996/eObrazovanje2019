@@ -2,20 +2,28 @@ package eObrazovanje.web.model;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Entity(name= "uplata")
 public class Uplata {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="uplata_id")
 	private Integer uplataId;
 	
+	@Column(name="datum_uplate", nullable = false)
 	private Date datumUplate;
 	
+	@Column(name="svrha_uplate", nullable = false)
 	private String SvrhaUplate;
 	
+	@Min(value = 1, message = "mora biti +")
 	private  float iznos;
 	
+	@ManyToOne
+	@JoinColumn(name="jmbg", referencedColumnName = "jmbg", nullable = false)
 	private Ucenik ucenik;
 
 	public Uplata() {

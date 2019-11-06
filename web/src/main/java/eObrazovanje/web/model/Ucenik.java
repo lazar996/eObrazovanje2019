@@ -3,18 +3,25 @@ package eObrazovanje.web.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.swing.plaf.basic.BasicToolBarUI.DockingListener;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name ="ucenik")
+@DiscriminatorValue("ucenik")
 public class Ucenik extends Korisnik{
 	
+	@Column(name="broj_indeksa", unique = true)
 	private String brojIndeksa;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "ucenik", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private List<Dokumenta> dokumenti = new ArrayList<>();
-	
+	@JsonIgnore
+	@OneToMany(mappedBy = "ucenik", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private List<PohadjanjePredmeta> pohadjanjePredmeta= new ArrayList<>();
-	
+	@JsonIgnore
+	@OneToMany(mappedBy = "ucenik", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private List<Obaveza> obaveza= new ArrayList<>();
 
 	

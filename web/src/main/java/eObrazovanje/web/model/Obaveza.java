@@ -2,18 +2,35 @@ package eObrazovanje.web.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+@Entity(name = "obaveza")
 public class Obaveza {
 
-	
+	@Id
+	@GeneratedValue
+	@Column(name = "obaveza_id")
 	private Integer obavezaId;
+	
+	@ManyToOne
+	@JoinColumn(name="jmbg", referencedColumnName = "jmbg", nullable = false)
 	private Ucenik ucenik;
 	
+	@ManyToOne
+	@JoinColumn(name="prdmet_id", referencedColumnName = "predmet_id", nullable = false)
 	private Predmet predmet;
 	
+	@Column(nullable = false)
 	private Date datumObaveze;
 	
+	@Column(nullable = false)
 	private Boolean polozenPredmet;
 	
+	@Column(name= "naziv_obaveze", nullable = false)
 	private String nazivObaveze;
 
 	
@@ -114,6 +131,10 @@ public class Obaveza {
 		return "Obaveza [obavezaId=" + obavezaId + ", ucenik=" + ucenik + ", predmet=" + predmet + ", datumObaveze="
 				+ datumObaveze + ", polozenPredmet=" + polozenPredmet + ", nazivObaveze=" + nazivObaveze + "]";
 	}
+
+
+
+
 	
 	
 }
