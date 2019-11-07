@@ -50,46 +50,14 @@ public class DokumentaController {
 	
 	
 
- /*   @PostMapping(value = "api/uploadDoc",consumes = "multipart/form-data")
-    public UploadFile uploadFile(@RequestParam(value="dokument") String dokumentString, @RequestPart("file") MultipartFile file) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
-        ObjectMapper mapper = new ObjectMapper();
-        DokumentaDTO dokumentDTO = mapper.readValue(dokumentString,DokumentaDTO.class);
-        System.out.println(dokumentDTO.toString());
-        Ucenik ucenik = null;
-        if(korisnik.getTipKorisnika().equals("student")){
-        	ucenik = ucenikRepo.findByKorisnickoIme(korisnik.getKorisnickoIme());
-        }
-        if(korisnik.getTipKorisnika().equals("administrator")){
-            ucenik = ucenikRepo.findByBrojIndeksa(dokumentDTO.getBrojIndeksa());
-        }
-        Dokumenta dokument = new Dokumenta();
-        String fileName = fileService.storeFiles(file,ucenik.getKorisnickoIme());
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName).toUriString();
-        dokument.setDownloadUri(fileName);
-        dokument.setUcenik(ucenik);
-        dokument.setNaziv(dokumentDTO.getNaziv());
-        dokument.setTipDokumenta(dokumentDTO.getTipDokumenta());
-        dokumentaService.save(dokument);
-
-
-
-        return new UploadFile(fileName,fileDownloadUri,file.getContentType(),file.getSize());
-
-    }
-
-	*/
+ 
 	
+	@CrossOrigin
 	@GetMapping("/dokument/all")
-	public ResponseEntity<List<DokumentaDTO>>getAll(){
-		List<Dokumenta> dokumentas = dokumentaService.getAll();
-		List<DokumentaDTO> dokumentaDTOs= dokumentas.stream().filter(
-				dokumnet -> fileService.checkIfFileExist(dokumnet.getDownloadUri())).map(dokumnet -> new DokumentaDTO(dokumnet)).collect(Collectors.toList());
+	public ResponseEntity<?>getAll(){
 		
-		return new ResponseEntity<List<DokumentaDTO>>(dokumentaDTOs, HttpStatus.OK);
+		return new ResponseEntity<List<Dokumenta>>(dokumentaService.getAll(),HttpStatus.OK);
 	}
-	
 	
     @GetMapping("/dokument/{id}")
     public ResponseEntity<DokumentaDTO> getOne(@PathVariable Integer id){

@@ -6,7 +6,7 @@ import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,16 +24,8 @@ public class KorisnikController {
 	@Autowired
 	KorisnikRepo korisnikRepo;
 	
-	/*@Autowired
-	private UserDetailsService userDetailsService;
-	*/
-/*	@Autowired 
-	TokenUtils tokenUtils;
-	*/
-	
-	/*@Autowired
-	BCryptPasswordEncoder bCryptPasswordEncoder;
-	*/
+
+	@CrossOrigin
 	@GetMapping("/api/korisnici")
 	public ResponseEntity<?>getAll(){
 		return new ResponseEntity<List<Korisnik>>(this.korisnikService.getAll(),HttpStatus.OK);
