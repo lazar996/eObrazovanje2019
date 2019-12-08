@@ -27,20 +27,17 @@ public class Ucenik extends Korisnik{
 	
 	
 	public Ucenik() {
-		super();
+		super("ucenik");
 	}
 
 
 
-	public Ucenik(String brojIndeksa, List<Dokumenta> dokumenti, List<PohadjanjePredmeta> pohadjanjePredmeta,
-			List<Obaveza> obaveza) {
-		super();
-		this.brojIndeksa = brojIndeksa;
-		this.dokumenti = dokumenti;
-		this.pohadjanjePredmeta = pohadjanjePredmeta;
-		this.obaveza = obaveza;
-	}
 
+
+	  public Ucenik(Long jmbg, String korisnickoIme, String lozinka, String ime, String prezime, String brojTelefona, String email, String ulicaBroj, Integer postanskiBroj, String mesto,String brojIndeksa) {
+	        super(jmbg,"nastavnik", korisnickoIme, lozinka, ime, prezime, brojTelefona, email, ulicaBroj, mesto);
+	        this.brojIndeksa = brojIndeksa;
+	    }
 
 
 	public String getBrojIndeksa() {
@@ -93,8 +90,12 @@ public class Ucenik extends Korisnik{
 
 	@Override
 	public String toString() {
-		return "Ucenik [brojIndeksa=" + brojIndeksa + ", dokumenti=" + dokumenti + ", pohadjanjePredmeta="
-				+ pohadjanjePredmeta + ", obaveza=" + obaveza + "]";
+		return "ucenik{" +
+                "brojIndeksa='" + brojIndeksa + '\'' +
+                ", dokumenti=" + dokumenti +
+                ", pohadjanjePredmeta=" + pohadjanjePredmeta +
+                ", obaveza=" + obaveza +
+                "} " + super.toString();
 	}
 	
 	

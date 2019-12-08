@@ -4,6 +4,7 @@ Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: Lazar-PC
 Implementation-Vendor-Id: eObrazovanje
 Build-Jdk: 1.8.0_231
-Implementation-URL: http://maven.apache.org
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/web
 Created-By: Maven Integration for Eclipse
 

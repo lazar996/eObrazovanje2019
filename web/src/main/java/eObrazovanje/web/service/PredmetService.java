@@ -19,9 +19,6 @@ public class PredmetService {
 	
 
 
-	public List<Predmet> getAll(){
-		
-		return predmetRepo.findAll();
-		}
+	public List<Predmet> getAll(){return predmetRepo.findAll();}
 	
 }

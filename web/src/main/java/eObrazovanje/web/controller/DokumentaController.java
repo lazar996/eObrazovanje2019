@@ -53,7 +53,7 @@ public class DokumentaController {
  
 	
 	@CrossOrigin
-	@GetMapping("/dokument/all")
+	@GetMapping("api/dokumenta")
 	public ResponseEntity<?>getAll(){
 		
 		return new ResponseEntity<List<Dokumenta>>(dokumentaService.getAll(),HttpStatus.OK);
