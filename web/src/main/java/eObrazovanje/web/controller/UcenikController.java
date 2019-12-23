@@ -2,6 +2,7 @@ package eObrazovanje.web.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import eObrazovanje.web.model.Korisnik;
+import eObrazovanje.web.model.Nastavnik;
 import eObrazovanje.web.model.Ucenik;
 import eObrazovanje.web.repository.KorisnikRepo;
 import eObrazovanje.web.repository.UcenikRepo;
@@ -67,5 +71,25 @@ public class UcenikController {
                 ucenikRepo.save(ucenik),
                 HttpStatus.OK
         );
+    }
+    
+    @PostMapping("/api/ucenik")
+    public ResponseEntity<?> addUcenik(@Valid @RequestBody Ucenik nastavnik){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
+        if(!korisnik.getTipKorisnika().equals("administrator")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Ucenik>(ucenikService.add(nastavnik),HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+	@Transactional
+    @DeleteMapping("api/ucenik/{jmbg}")
+    public ResponseEntity<?> deleteUcenik(@PathVariable Long jmbg){
+      
+
+        this.ucenikRepo.deleteByJmbg(jmbg);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

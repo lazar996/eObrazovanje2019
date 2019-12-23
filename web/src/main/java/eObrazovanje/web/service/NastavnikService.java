@@ -17,4 +17,6 @@ public class NastavnikService {
 	NastavnikRepo nastavnikRepo;
 	
     public List<Nastavnik> getAll(){return  nastavnikRepo.findAll();}
+    public void delete(Long jmbg) {nastavnikRepo.deleteByJmbg(jmbg);}
+    public Nastavnik add(Nastavnik nastavnik) {return nastavnikRepo.save(nastavnik);}
 }
