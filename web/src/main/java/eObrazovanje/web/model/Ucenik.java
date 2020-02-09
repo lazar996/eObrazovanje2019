@@ -22,7 +22,7 @@ public class Ucenik extends Korisnik{
 	private List<PohadjanjePredmeta> pohadjanjePredmeta= new ArrayList<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "ucenik", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	private List<Obaveza> obaveza= new ArrayList<>();
+	private List<PolaganjePredmeta> obaveza= new ArrayList<>();
 
 	
 	
@@ -76,13 +76,13 @@ public class Ucenik extends Korisnik{
 
 
 
-	public List<Obaveza> getObaveza() {
+	public List<PolaganjePredmeta> getObaveza() {
 		return obaveza;
 	}
 
 
 
-	public void setObaveza(List<Obaveza> obaveza) {
+	public void setObaveza(List<PolaganjePredmeta> obaveza) {
 		this.obaveza = obaveza;
 	}
 
@@ -90,7 +90,7 @@ public class Ucenik extends Korisnik{
 
 	@Override
 	public String toString() {
-		return "ucenik{" +
+		return "Ucenik{" +
                 "brojIndeksa='" + brojIndeksa + '\'' +
                 ", dokumenti=" + dokumenti +
                 ", pohadjanjePredmeta=" + pohadjanjePredmeta +

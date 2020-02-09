@@ -1,7 +1,5 @@
 package eObrazovanje.web.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +46,7 @@ public class KorisnikController {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    
     @CrossOrigin
     @GetMapping("api/korisnici")
     public ResponseEntity<?> getAll(){
@@ -70,7 +69,7 @@ public class KorisnikController {
         }
     }
 
-
+    @CrossOrigin
     @PostMapping("/api/lozinka")
     public ResponseEntity<?> changePass(@RequestBody ChangePasswordData changePasswordData){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

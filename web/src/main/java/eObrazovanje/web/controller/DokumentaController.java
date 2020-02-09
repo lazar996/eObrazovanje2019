@@ -24,6 +24,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import eObrazovanje.web.dto.DokumentaDTO;
+import eObrazovanje.web.dto.UplataDTO;
 import eObrazovanje.web.model.Dokumenta;
 import eObrazovanje.web.model.Korisnik;
 import eObrazovanje.web.model.Ucenik;
@@ -32,7 +33,7 @@ import eObrazovanje.web.repository.UcenikRepo;
 import eObrazovanje.web.response.UploadFile;
 import eObrazovanje.web.service.DokumentaService;
 import eObrazovanje.web.service.FileService;
-
+@CrossOrigin
 @RestController
 public class DokumentaController {
 
@@ -48,17 +49,19 @@ public class DokumentaController {
 	
 	@Autowired
 	UcenikRepo ucenikRepo;
-	
-	
 
- 
 	
 	@CrossOrigin
 	@GetMapping("api/dokumenta")
-	public ResponseEntity<?>getAll(){
+	public ResponseEntity<List<DokumentaDTO>>getAll(){
 		
-		return new ResponseEntity<List<Dokumenta>>(dokumentaService.getAll(),HttpStatus.OK);
+		List<Dokumenta> dokumentas = dokumentaService.getAll();
+		List<DokumentaDTO> dokumentaDTOs = dokumentas.stream().filter(dokument -> fileService.checkIfFileExist(dokument.getDownloadUri()) 
+				).map(dokument -> new DokumentaDTO(dokument)).collect(Collectors.toList());
+		
+		return new ResponseEntity<List<DokumentaDTO>>(dokumentaDTOs,HttpStatus.OK);
 	}
+	
 	 @CrossOrigin
 	 @PostMapping(value = "api/uploadDoc",consumes = "multipart/form-data")
 	    public UploadFile uploadFile(@RequestParam(value="dokument") String dokumentString, @RequestPart("file") MultipartFile file) throws IOException {
@@ -76,18 +79,56 @@ public class DokumentaController {
 	        }
 	        Dokumenta dokument = new Dokumenta();
 	        String fileName = fileService.storeFiles(file,ucenik.getKorisnickoIme());
-	        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName).toUriString();
+	        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(fileName).toUriString();
 	        dokument.setDownloadUri(fileName);
 	        dokument.setUcenik(ucenik);
 	        dokument.setNaziv(dokumentaDTO.getNaziv());
 	        dokument.setTipDokumenta(dokumentaDTO.getTipDokumenta());
 	        dokumentaService.save(dokument);
-
-
-
 	        return new UploadFile(fileName,fileDownloadUri,file.getContentType(),file.getSize());
 
 	    }
+	 
+	@CrossOrigin
+	@GetMapping("/api/download/{username}/{fileName:.+}")
+	 public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, @PathVariable String username, HttpServletRequest request){
+        Resource resource = fileService.loadFileAsResource(fileName,username);
+        System.out.println(resource.getFilename());
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            System.out.println("Could not determine file type.");
+        }
+
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+	
+	 @CrossOrigin
+	 @PutMapping("api/dokument")
+	 public ResponseEntity<?>editDokument(@RequestBody DokumentaDTO dokumentaDTO){
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
+			
+			if(!korisnik.getTipKorisnika().equals("administrator")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			Dokumenta dokumenta = new Dokumenta();
+			dokumenta.setDokumentId(dokumentaDTO.getId());
+			dokumenta.setDownloadUri(dokumenta.getDownloadUri());
+			dokumenta.setNaziv(dokumentaDTO.getNaziv());
+			dokumenta.setTipDokumenta(dokumentaDTO.getTipDokumenta());
+			dokumenta.setUcenik(ucenikRepo.findByBrojIndeksa(dokumentaDTO.getBrojIndeksa()));
+		 
+			return new ResponseEntity<DokumentaDTO>(new DokumentaDTO(dokumentaService.save(dokumenta)), HttpStatus.OK);
+	 }
+	 
 	@CrossOrigin
     @GetMapping("/dokument/{id}")
     public ResponseEntity<DokumentaDTO> getOne(@PathVariable Integer id){
@@ -100,7 +141,6 @@ public class DokumentaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        
 
     }
 	@CrossOrigin
@@ -111,6 +151,5 @@ public class DokumentaController {
     	return new ResponseEntity<>(HttpStatus.OK);
     }
     
-
 	}
 

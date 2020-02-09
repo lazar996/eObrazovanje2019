@@ -23,9 +23,8 @@ public class Predmet {
 	public Predmet() {
 	
 	}
-	public Predmet(Integer predmetId, String naziv, String opis) {
-		super();
-		this.predmetId = predmetId;
+	public Predmet(String naziv, String opis) {
+		
 		this.naziv = naziv;
 		this.opis = opis;
 	}
@@ -47,12 +46,14 @@ public class Predmet {
 	public void setOpis(String opis) {
 		this.opis = opis;
 	}
-	@Override
-	public String toString() {
-		return "Predmet [predmetId=" + predmetId + ", naziv=" + naziv + ", opis=" + opis + "]";
-	}
-
-	
+    @Override
+    public String toString() {
+        return "Predmet{" +
+                "predmetId=" + predmetId +
+                ", naziv='" + naziv + '\'' +
+                ", opis='" + opis + '\'' +
+                '}';
+    }
 	
 
 }

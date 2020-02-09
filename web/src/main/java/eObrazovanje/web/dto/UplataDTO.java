@@ -6,7 +6,7 @@ import eObrazovanje.web.model.Uplata;
 
 public class UplataDTO {
 
-	private Integer id;
+	private Integer UplataId;
 	private Date datumUplate;
 	private String svrhaUplate;
 	private Float iznos;
@@ -17,15 +17,15 @@ public class UplataDTO {
 	
 	
 	public UplataDTO() {
-		super();
+		
 	}
 
 
 
 
 	public UplataDTO(Uplata uplata) {
-		super();
-		this.id = uplata.getUplataId();
+		
+		this.UplataId = uplata.getUplataId();
 		this.datumUplate = uplata.getDatumUplate();
 		this.svrhaUplate = uplata.getSvrhaUplate();
 		this.iznos = uplata.getIznos();
@@ -36,15 +36,17 @@ public class UplataDTO {
 
 
 
-	public Integer getId() {
-		return id;
+
+
+	public Integer getUplataId() {
+		return UplataId;
 	}
 
 
 
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUplataId(Integer uplataId) {
+		UplataId = uplataId;
 	}
 
 
@@ -120,13 +122,7 @@ public class UplataDTO {
 
 
 
-	@Override
-	public String toString() {
-		return "UplataDTO [id=" + id + ", datumUplate=" + datumUplate + ", svrhaUplate=" + svrhaUplate + ", iznos="
-				+ iznos + ", brojIndeksa=" + brojIndeksa + ", imePrezime=" + imePrezime + "]";
-	}
-	
-	
+
 	
 	
 }

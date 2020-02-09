@@ -22,20 +22,12 @@ public class PohadjanjePredmeta {
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "prdmet_id", referencedColumnName = "predmet_id", nullable = false)
+	@JoinColumn(name = "predmet_id", referencedColumnName = "predmet_id", nullable = false)
 	private Predmet predmet;
 
 	
 	public PohadjanjePredmeta() {
 		
-	}
-
-
-	public PohadjanjePredmeta(Integer id, Ucenik ucenik, Predmet predmet) {
-		super();
-		this.id = id;
-		this.ucenik = ucenik;
-		this.predmet = predmet;
 	}
 
 
@@ -67,13 +59,5 @@ public class PohadjanjePredmeta {
 	public void setPredmet(Predmet predmet) {
 		this.predmet = predmet;
 	}
-
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
-	}
-	
 	
 }

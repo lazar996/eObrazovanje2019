@@ -16,6 +16,24 @@ public class UplataService {
 	@Autowired
 	UplataRepo uplataRepo;
 	
-	public List<Uplata> getAllUplate() {return uplataRepo.findAll();}
+	public List<Uplata> getAllUplate() {
+		return uplataRepo.findAll();}
+	
+	
+	public void remove(Integer id) {
+		
+		Uplata uplata = uplataRepo.getOne(id);
+		uplataRepo.deleteById(id);
+		
+	}
+	
+
+	
+	public Uplata save(Uplata uplata) {
+		
+		return uplataRepo.save(uplata);
+	}
+	
+	   
 
 }

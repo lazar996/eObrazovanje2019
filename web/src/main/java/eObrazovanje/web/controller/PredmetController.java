@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import eObrazovanje.web.model.Korisnik;
 import eObrazovanje.web.model.Predmet;
 import eObrazovanje.web.repository.KorisnikRepo;
+import eObrazovanje.web.repository.NastavnikRepo;
 import eObrazovanje.web.repository.PredmetRepo;
 import eObrazovanje.web.repository.UcenikRepo;
 import eObrazovanje.web.service.PredmetService;
@@ -32,11 +33,14 @@ public class PredmetController {
 	@Autowired
 	KorisnikRepo korisnikRepo;
 	
-	//@Autowired 
-	//UcenikRepo UcenikRepo;
+	@Autowired 
+	UcenikRepo UcenikRepo;
 	
 	@Autowired
 	PredmetRepo predmetRepo;
+	
+	@Autowired
+	NastavnikRepo nastavnikRepo;
 	
 	@GetMapping("/api/predmeti")
 	public ResponseEntity<?> getAll(){
@@ -48,6 +52,31 @@ public class PredmetController {
         }*/
 		return new ResponseEntity<List<Predmet>>(predmetService.getAll(), HttpStatus.OK);
 	}
+	
+	@GetMapping("/api/ucenikPohadja")
+	public ResponseEntity<?> getPredmetiKojeUcenikPohadja(){
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
+        if(!korisnik.getTipKorisnika().equals("ucenik")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        System.out.println("ovoo je //////////**************"+ korisnik.getKorisnickoIme());
+        return new ResponseEntity<List<Predmet>>(this.predmetService.allUcenikPredmetPohadja(this.UcenikRepo.getOne(korisnik.getJmbg()).getBrojIndeksa()), HttpStatus.OK);
+        	}
+	
+	@GetMapping("/api/nastavnikPredaje")
+	public ResponseEntity<?> getPredmetKojiNastavnikPredaje(){
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
+        if(!korisnik.getTipKorisnika().equals("nastavnik")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        System.out.println("ovoo je //////////**************"+ korisnik.getKorisnickoIme());
+        return new ResponseEntity<List<Predmet>>(this.predmetService.allNastavnikPredmetPredaje(korisnik.getJmbg()), HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<Predmet> addPredmet(@RequestBody Predmet predmet){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

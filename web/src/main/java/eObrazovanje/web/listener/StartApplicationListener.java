@@ -9,6 +9,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import eObrazovanje.web.model.Administrator;
+import eObrazovanje.web.model.Nastavnik;
 import eObrazovanje.web.model.Ucenik;
 import eObrazovanje.web.repository.AdministratorRepo;
 import eObrazovanje.web.repository.NastavnikRepo;
@@ -20,8 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class StartApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
 	
-	@Autowired 
-	UcenikRepo ucenikRepo;
+	
 	
 	@Autowired
 	NastavnikRepo nastavnikRepo;
@@ -29,7 +29,7 @@ public class StartApplicationListener implements ApplicationListener<ContextRefr
 	@Autowired
 	FileService fileService;
 	
-	
+
 	@Autowired 
 	UplataRepo uplataRepo;
 	
@@ -41,28 +41,29 @@ public class StartApplicationListener implements ApplicationListener<ContextRefr
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		initializeUcenik();
+		
 		initializeAdmin();
+		initializeNastavnika();
 		
 	}
 	
-	public void initializeUcenik() {
+	public void initializeNastavnika() {
 		
-		Ucenik ucenik = new Ucenik();
-		ucenik.setBrojIndeksa("Sf38/2015");
-		ucenik.setBroj("060660606060");
-		ucenik.setEmail("mail");
-		ucenik.setKorisnickoIme("pera");
-		ucenik.setIme("Petar");
-		ucenik.setPrezime("Peric");
-		ucenik.setTipKorisnika("ucenik");
-		ucenik.setGrad("Novi Sad");
-		ucenik.setLozinka(bCryptPasswordEncoder.encode("123"));
-		ucenik.setUlica("Perina bb");
-		ucenikRepo.save(ucenik);
+		Nastavnik nastavnik = new Nastavnik();
+		
+		nastavnik.setBroj("060660606060");
+		nastavnik.setEmail("mail");
+		nastavnik.setKorisnickoIme("Ivan");
+		nastavnik.setIme("Petar");
+		nastavnik.setPrezime("Peric");
+		nastavnik.setTipKorisnika("nastavnik");
+		nastavnik.setGrad("Novi Sad");
+		nastavnik.setLozinka(bCryptPasswordEncoder.encode("123"));
+		nastavnik.setUlica("Perina bb");
+		nastavnik.setZvanje("docent");
+		nastavnikRepo.save(nastavnik);
 		
 	}
-	
 	public void initializeAdmin() {
 		
 		Administrator admin= new Administrator();

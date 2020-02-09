@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,9 @@ public class NastavnikController {
 	@Autowired
 	KorisnikRepo korisnikRepo;
 	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	
 	@CrossOrigin
 	@GetMapping("/api/nastavnici")
@@ -48,14 +52,14 @@ public class NastavnikController {
 	public ResponseEntity<?> deleteNastavnik(@PathVariable Long jmbg){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
-		if (!korisnik.getTipKorisnika().equals("administrator")) {
+		if (korisnik.getTipKorisnika().equals("ucenik")) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			
 		}
 		nastavnikService.delete(jmbg);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+	@CrossOrigin
     @PostMapping("/api/nastavnici")
     public ResponseEntity<?> addNastavnik(@Valid @RequestBody Nastavnik nastavnik){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -63,9 +67,11 @@ public class NastavnikController {
         if(!korisnik.getTipKorisnika().equals("administrator")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        nastavnik.setLozinka(bCryptPasswordEncoder.encode(nastavnik.getLozinka()));
         return new ResponseEntity<Nastavnik>(nastavnikService.add(nastavnik),HttpStatus.OK);
     }
-    
+	
+	@CrossOrigin
     @PutMapping("/api/nastavnici")
     public ResponseEntity<?> editStudent(@Valid @RequestBody Nastavnik nastavnik){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,4 +84,16 @@ public class NastavnikController {
                 HttpStatus.OK
         );
     }
+    @GetMapping("/api/nastavnik/{id}")
+    public ResponseEntity<?> getById(@PathVariable Integer id){
+    	
+    	return new ResponseEntity<List<Nastavnik>>(nastavnikService.findByPredmet(id), HttpStatus.OK);
+    }
+    
+    @GetMapping("/api/nastavnik/new/{id}")
+    public ResponseEntity<?> getNewNastavnik(@PathVariable Integer id){
+    	
+    	return new ResponseEntity<List<Nastavnik>>(nastavnikService.newNastavnikOnKurs(id), HttpStatus.OK);
+    }
+    
 }

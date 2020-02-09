@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,9 @@ public class UcenikController {
 	@Autowired 
 	UcenikService ucenikService;
 	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	@Autowired
 	KorisnikRepo korisnikRepo;
 	
@@ -74,22 +78,34 @@ public class UcenikController {
     }
     
     @PostMapping("/api/ucenik")
-    public ResponseEntity<?> addUcenik(@Valid @RequestBody Ucenik nastavnik){
+    public ResponseEntity<?> addUcenik(@Valid @RequestBody Ucenik ucenik){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
-        if(!korisnik.getTipKorisnika().equals("administrator")){
+        if(korisnik.getTipKorisnika().equals("ucenik")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Ucenik>(ucenikService.add(nastavnik),HttpStatus.OK);
+        ucenik.setLozinka(bCryptPasswordEncoder.encode(ucenik.getLozinka()));
+        return new ResponseEntity<Ucenik>(ucenikRepo.save(ucenik),HttpStatus.OK);
     }
     
     @CrossOrigin
 	@Transactional
     @DeleteMapping("api/ucenik/{jmbg}")
     public ResponseEntity<?> deleteUcenik(@PathVariable Long jmbg){
-      
-
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
+        System.out.println(korisnik.getTipKorisnika());
+        if(!korisnik.getTipKorisnika().equals("administrator")){
+              return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+          }
+        System.out.println("----*****************----------");
         this.ucenikRepo.deleteByJmbg(jmbg);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @GetMapping("/api/ucenici/new/{id}")
+    public ResponseEntity<?> getNewUcenik(@PathVariable Integer id){
+    	
+    	return new ResponseEntity< List<Ucenik>>(ucenikService.ucenikKojiNeIdeNaPredmet(id), HttpStatus.OK);
     }
 }
